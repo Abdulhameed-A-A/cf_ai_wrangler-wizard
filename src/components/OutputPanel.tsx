@@ -12,6 +12,20 @@ type OutputPanelProps = {
   downloadLabel?: string;
 };
 
+function highlightPlaceholders(text: string) {
+  const parts = text.split(/(replace-with-[a-z0-9-]+|<project-name>|<database-name>|<bucket-name>|<namespace-[a-z]+>|<database_id>)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("replace-with-") || part.startsWith("<")) {
+      return (
+        <span key={i} className="rounded border border-orange-500/30 bg-orange-500/20 px-1 py-0.5 text-orange-200">
+          {part}
+        </span>
+      );
+    }
+    return part;
+  });
+}
+
 export function OutputPanel({
   title,
   badge,
@@ -51,7 +65,7 @@ export function OutputPanel({
 
       <div className="rounded-2xl border border-[color:var(--code-border)] bg-[color:var(--code-bg)] p-4 shadow-inner shadow-black/20">
         <pre className="code-font max-h-[28rem] overflow-auto whitespace-pre-wrap break-words text-sm leading-6 text-neutral-100">
-          <code>{hasContent ? content : emptyState}</code>
+          <code>{hasContent ? highlightPlaceholders(content) : emptyState}</code>
         </pre>
       </div>
     </section>

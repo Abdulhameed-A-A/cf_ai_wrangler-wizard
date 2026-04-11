@@ -43,6 +43,7 @@ type NormalizedRequirements = {
   includeKv: boolean;
   includeAi: boolean;
   includeBrowser: boolean;
+  framework?: string;
 };
 
 function slugify(value: string) {
@@ -66,6 +67,12 @@ function hasKeyword(prompt: string, keywords: string[]) {
 function inferRequirements(prompt: string): NormalizedRequirements {
   const normalizedPrompt = prompt.toLowerCase();
 
+  let framework: string | undefined = undefined;
+  if (hasKeyword(normalizedPrompt, ["next.js", "nextjs"])) framework = "Next.js";
+  else if (hasKeyword(normalizedPrompt, ["vue", "nuxt"])) framework = "Vue/Nuxt";
+  else if (hasKeyword(normalizedPrompt, ["react", "remix"])) framework = "React";
+  else if (hasKeyword(normalizedPrompt, ["hono"])) framework = "Hono";
+
   return {
     includeD1: hasKeyword(normalizedPrompt, ["d1", "database", "sqlite"]),
     includeR2: hasKeyword(normalizedPrompt, ["r2", "bucket", "object storage", "image storage"]),
@@ -73,6 +80,7 @@ function inferRequirements(prompt: string): NormalizedRequirements {
     includeAi: hasKeyword(normalizedPrompt, ["workers ai", "ai binding", "llm", "model"]),
     includeBrowser: hasKeyword(normalizedPrompt, ["browser"]),
     includeNode: hasKeyword(normalizedPrompt, ["next.js", "node", "npm", "package.json", "react", "nodejs_compat"]),
+    framework,
   };
 }
 
@@ -183,9 +191,12 @@ function buildGuidance(options: {
   includeR2: boolean;
   includeKv: boolean;
   includeNode: boolean;
+  framework?: string;
 }) {
   const steps = [
-    "Run npm create cloudflare@latest <project-name> and select your framework/template.",
+    options.framework
+      ? `Run npm create cloudflare@latest <project-name> and select ${options.framework} from the templates.`
+      : "Run npm create cloudflare@latest <project-name> and select your framework/template.",
     "Copy the generated wrangler.jsonc content into your project.",
   ];
 
@@ -242,6 +253,7 @@ export function buildFallbackGeneration(prompt: string): GenerationData {
       includeR2: requirements.includeR2,
       includeKv: requirements.includeKv,
       includeNode: requirements.includeNode,
+      framework: requirements.framework,
     }),
   };
 }
@@ -497,7 +509,7 @@ function normalizeCommandsForWrangler(commands: string[]) {
         return command;
       }
 
-      if (/^npx\s+wrangler\s+generate\b/i.test(command) || /^wrangler\s+generate\b/i.test(command)) {
+      if (/^npx\s+wrangler\s+(generate|init)\b/i.test(command) || /^wrangler\s+(generate|init)\b/i.test(command)) {
         return "npm create cloudflare@latest";
       }
 
@@ -505,6 +517,11 @@ function normalizeCommandsForWrangler(commands: string[]) {
         return "";
       }
 
+      if (/^npm\s+(i|install)\s+(-g\s+)?wrangler/i.test(command)) {
+        return "";
+      }
+
+      command = command.replace(/\bwrangler\s+publish\b/gi, "wrangler deploy");
       command = command.replace(/\bwrangler\s+kv:namespace\b/gi, "wrangler kv namespace");
 
       if (command.startsWith("wrangler ")) {
@@ -691,6 +708,7 @@ export function normalizeGenerationData(data: RawGenerationData, prompt: string)
       includeR2: requirements.includeR2 || Array.isArray(normalized.r2_buckets),
       includeKv: requirements.includeKv || Array.isArray(normalized.kv_namespaces),
       includeNode: requirements.includeNode,
+      framework: requirements.framework,
     });
 
     const finalGuidance = Array.from(new Set(canonicalGuidance));

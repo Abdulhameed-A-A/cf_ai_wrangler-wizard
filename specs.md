@@ -222,7 +222,7 @@ text
 
 ## 9. Testing Checklist (Before Submitting Internship Application)
 
-- [ ] User types “I need a Worker with a D1 database” → config contains `d1_databases` binding and a command `npx wrangler d1 create ...`.
+- [ ] User type s “I need a Worker with a D1 database” → config contains `d1_databases` binding and a command `npx wrangler d1 create ...`.
 - [ ] User types “I want an R2 bucket for images” → config contains `r2_buckets` binding.
 - [ ] User types an empty string → button disabled or shows error.
 - [ ] Network offline → error message appears.

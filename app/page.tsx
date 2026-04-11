@@ -50,6 +50,7 @@ export default function Home() {
   const [result, setResult] = useState<GenerationState | null>(null);
   const [warning, setWarning] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [successToast, setSuccessToast] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -106,6 +107,8 @@ export default function Home() {
 
       setResult(parsed.data);
       setWarning(payload.warning ?? null);
+      setSuccessToast(true);
+      setTimeout(() => setSuccessToast(false), 3000);
     } catch (requestError) {
       const fallback = buildFallbackGeneration(trimmedPrompt);
       setResult(fallback);
@@ -185,6 +188,12 @@ export default function Home() {
           copyLabel="Copy guidance steps"
         />
       </div>
+
+      {successToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 rounded-full border border-green-500/20 bg-green-500/10 px-4 py-2 text-sm font-medium text-green-400 shadow-xl backdrop-blur-md transition-all animate-in fade-in slide-in-from-bottom-4">
+          ✨ Successfully generated project files
+        </div>
+      )}
     </main>
   );
 }
