@@ -70,4 +70,12 @@ Deploying to Cloudflare should always be this easy.
 
 This project is optimized and QA-ready for a direct Cloudflare Pages deployment with the Next.js App Router configured to run entirely via the Edge Runtime.
 
+### Important Build Settings 
+When deploying on the Cloudflare Dashboard, use these exact settings:
+- **Framework Preset**: `Next.js`
+- **Build command**: `npx @cloudflare/next-on-pages@1`
+- **Build output directory**: `.vercel/output/static`
+
+*Note: Without these settings, Cloudflare will attempt to upload raw `.next/cache` pack files as standard assets, which causes the `25 MiB` asset size limit failure.*
+
 Ensure you set all required environment variables (`CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`) within your Cloudflare Pages dashboard before bringing the AI integrations live.

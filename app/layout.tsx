@@ -7,6 +7,9 @@ export const metadata: Metadata = {
     "Turn plain-English descriptions into ready-to-use Cloudflare wrangler.jsonc configurations and execution commands instantly. Built with Workers AI.",
   keywords: ["Cloudflare", "Wrangler", "Workers AI", "Serverless", "Edge", "Next.js", "D1", "R2", "KV"],
   authors: [{ name: "Cloudflare Developer" }],
+  icons: {
+    icon: "/icon.svg",
+  },
   openGraph: {
     title: "Wrangler Wizard | Cloudflare Project Bootstrapper",
     description: "Turn plain-English descriptions into ready-to-use Cloudflare configurations and CLI commands instantly. Powered by Workers AI.",
