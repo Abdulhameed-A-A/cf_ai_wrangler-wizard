@@ -1,4 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Wrangler Wizard
+
+Wrangler Wizard is a Next.js 16 App Router project that turns a plain-English Cloudflare project description into:
+
+- a copy-ready `wrangler.jsonc` file
+- the terminal commands needed to create the required resources
+
+## Features
+
+- Dark, developer-focused UI built with Tailwind CSS v4
+- Cloudflare Workers AI-backed generation route at `/api/generate`
+- Fallback config generation when AI credentials are missing or parsing fails
+- Copy buttons for config and commands
+- Download button for `wrangler.jsonc`
+- Responsive layout for mobile and desktop
+
+## Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- Zod
+
+## Getting Started
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Run the development server:
+
+```bash
+npm run dev
+```
+
+3. Open `http://localhost:3000`.
+
+## AI Configuration
+
+The `/api/generate` route uses Cloudflare Workers AI when the following environment variables are available:
+
+- `CLOUDFLARE_ACCOUNT_ID`
+- `CLOUDFLARE_API_TOKEN`
+
+If those values are missing, the app generates a local fallback configuration so the UI still works during development.
+
+## Validation Rules
+
+- Prompts must be at least 10 characters long.
+- Prompts can be up to 2,000 characters.
+- The API returns structured JSON and falls back to a safe default if the model output cannot be parsed.
+
+## Deployment Notes
+
+This project is ready for Cloudflare Pages deployment with the Next.js App Router. Set the environment variables above in your Pages project before enabling live AI generation.This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
