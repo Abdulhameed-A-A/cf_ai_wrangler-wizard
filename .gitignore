@@ -39,6 +39,10 @@ PROMPTS.md
 # vercel
 .vercel
 
+# cloudflare / opennext
+.open-next
+.wrangler
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
