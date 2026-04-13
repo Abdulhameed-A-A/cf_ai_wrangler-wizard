@@ -7,8 +7,6 @@ import {
 	parseModelResponse,
 } from "@/lib/wrangler";
 
-export const runtime = "edge";
-
 const DEFAULT_AI_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
 const DEFAULT_REQUEST_TIMEOUT_MS = 60_000;
 const MAX_RETRIES = 1;
